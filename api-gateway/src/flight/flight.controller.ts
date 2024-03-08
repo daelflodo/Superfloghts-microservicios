@@ -23,7 +23,7 @@ import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 
 @ApiTags('flights')
 @UseGuards(JwtAuthGuard)
-@Controller('/api/v1/flight')
+@Controller('/api/v2/flight')
 export class FlightController {
   constructor(private readonly clientProxy: ClientProxySuperFlights) {}
   private _clientProxyFlight = this.clientProxy.clientProxyFlights();
@@ -75,4 +75,40 @@ export class FlightController {
       passengerId,
     });
   }
+
+  //* una forma diferente sin usar metodo deprecado
+  /**
+   * import { from } from 'rxjs';
+import { catchError, first, map } from 'rxjs/operators';
+
+// Dentro de tu clase...
+
+@Post(':flightId/passenger/:passengerId')
+async addPassenger(
+  @Param('flightId') flightId: string,
+  @Param('passengerId') passengerId: string,
+) {
+  const passenger = await this._clientProxyPassenger
+    .send(PassengerMSG.FIND_ONE, passengerId)
+    .pipe(
+      map(response => {
+        if (!response) {
+          throw new HttpException('Passenger Not Found', HttpStatus.NOT_FOUND);
+        }
+        return response;
+      }),
+      first(), // Para obtener solo el primer valor y completar el Observable
+      catchError(error => {
+        throw new HttpException('Error retrieving passenger', HttpStatus.INTERNAL_SERVER_ERROR);
+      })
+    )
+    .toPromise();
+
+  return this._clientProxyFlight.send(FlightMSG.ADD_PASSANGER, {
+    flightId,
+    passengerId,
+  }).toPromise();
+}
+
+   */
 }

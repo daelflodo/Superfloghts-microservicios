@@ -21,7 +21,7 @@ import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 
 @ApiTags('passengers')
 @UseGuards(JwtAuthGuard)
-@Controller('api/v1/passenger')
+@Controller('api/v2/passenger')
 export class PassengerController {
   constructor(
     private readonly clientProxy: ClientProxySuperFlights,
