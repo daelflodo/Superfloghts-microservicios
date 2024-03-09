@@ -1,4 +1,10 @@
-import { ConflictException, HttpStatus, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  ConflictException,
+  HttpStatus,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 
 import { CreateUserDto } from './dto/create-user.dto';
@@ -19,46 +25,63 @@ export class UserService {
     return await bcrypt.hash(password, salt);
   }
   async create(createUserDto: CreateUserDto): Promise<IUser> {
-    try {
-      createUserDto.password = await this.hashPassword(createUserDto.password);
-      const usernameFound = await this.userRepository.findOne({
-        where: { username: createUserDto.username },
-      });
-      const emailFound = await this.userRepository.findOne({
-        where: { email: createUserDto.email },
-      });
-      if (usernameFound || emailFound)
-        throw new ConflictException('key duplicada');
-      const newUser = await this.userRepository.save(createUserDto);
-      return newUser;
-    } catch (error) {
-      return error;
-    }
+    createUserDto.password = await this.hashPassword(createUserDto.password);
+    const usernameFound = await this.userRepository.findOne({
+      where: { username: createUserDto.username },
+    });
+    const emailFound = await this.userRepository.findOne({
+      where: { email: createUserDto.email },
+    });
+    if (usernameFound)
+      throw new ConflictException('The username already exists');
+    if (emailFound) throw new ConflictException('The email already exists');
+    const newUser = await this.userRepository.save(createUserDto);
+    delete newUser.password;
+    return newUser;
   }
 
   async findAll(): Promise<IUser[]> {
-    return await this.userRepository.find();
+    const users = await this.userRepository.find();
+    users.map((user) => delete user.password);
+    return users;
   }
 
   async findOne(id: string): Promise<IUser> {
-    return await this.userRepository.findOne({ where: { id } });
+    const user = await this.userRepository.findOne({ where: { id } });
+    if (!user) throw new NotFoundException('User Not Found');
+    delete user.password;
+    return user;
   }
 
   async update(id: string, updateUserDto: UpdateUserDto): Promise<IUser> {
+    if (!updateUserDto.password) throw new BadRequestException('Missing data');
+    let user = await this.userRepository.findOne({ where: { id } });
+    if (!user) throw new NotFoundException('User Not Found');
     updateUserDto.password = await this.hashPassword(updateUserDto.password);
     await this.userRepository.update(id, updateUserDto);
-    return await this.userRepository.findOne({ where: { id } });
+    user = await this.userRepository.findOne({ where: { id } });
+    delete user.password;
+    return user;
   }
 
   async remove(id: string) {
+    const user = await this.userRepository.findOne({ where: { id } });
+    if (!user) throw new NotFoundException('User Not Found');
     await this.userRepository.delete(id);
-    return { status: HttpStatus.OK, msg: 'Usuario Eliminado Correctamente' };
+    delete user.password
+    return {
+      message: 'User deleted successfully',
+      statusCode: HttpStatus.OK,
+      user,
+    };
   }
 
   async findByUsername(username: string) {
-    return await this.userRepository.findOne({
+    const user = await this.userRepository.findOne({
       where: { username },
     });
+    if (!user) throw new NotFoundException('User Not Found');
+    return user;
   }
 
   async checkPassword(password: string, passwordDb: string): Promise<boolean> {

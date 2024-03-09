@@ -37,11 +37,6 @@ export class AuthService {
   }
 
   async signUp(createUserDto: CreateUserDto) {
-    console.log(5);
-  
-    // return firstValueFrom(
-    //   this._clientProxyUser.send(UserMSG.CREATE, createUserDto),
-    // );
     return this._clientProxyUser.send(UserMSG.CREATE, createUserDto)
   }
 }
