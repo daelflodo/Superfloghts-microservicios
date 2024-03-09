@@ -123,7 +123,7 @@
         ]
       }
     },
-    "/api/v2/passenger": {
+    "/api/v1/passenger": {
       "post": {
         "operationId": "PassengerController_create",
         "parameters": [],
@@ -159,7 +159,7 @@
         ]
       }
     },
-    "/api/v2/passenger/{id}": {
+    "/api/v1/passenger/{id}": {
       "get": {
         "operationId": "PassengerController_findOne",
         "parameters": [
@@ -234,7 +234,7 @@
         ]
       }
     },
-    "/api/v2/flight": {
+    "/api/v1/flight": {
       "post": {
         "operationId": "FlightController_create",
         "parameters": [],
@@ -270,7 +270,7 @@
         ]
       }
     },
-    "/api/v2/flight/{id}": {
+    "/api/v1/flight/{id}": {
       "get": {
         "operationId": "FlightController_findOne",
         "parameters": [
@@ -345,7 +345,7 @@
         ]
       }
     },
-    "/api/v2/flight/{flightId}/passenger/{passengerId}": {
+    "/api/v1/flight/{flightId}/passenger/{passengerId}": {
       "post": {
         "operationId": "FlightController_addPassenger",
         "parameters": [
@@ -376,7 +376,7 @@
         ]
       }
     },
-    "/api/v2/auth/sign-in": {
+    "/api/v1/auth/sign-in": {
       "post": {
         "operationId": "AuthController_signIn",
         "parameters": [],
@@ -390,7 +390,7 @@
         ]
       }
     },
-    "/api/v2/auth/sign-up": {
+    "/api/v1/auth/sign-up": {
       "post": {
         "operationId": "AuthController_signUp",
         "parameters": [],

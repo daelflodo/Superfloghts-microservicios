@@ -6,7 +6,7 @@ import { CreateUserDto } from 'src/user/dto/create-user.dto';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 
 @ApiTags('Autentication')
-@Controller('/api/v2/auth')
+@Controller('/api/v1/auth')
 export class AuthController {
     constructor(
         private readonly authService: AuthService
@@ -14,11 +14,10 @@ export class AuthController {
     @UseGuards(LocalAuthGuard)
     @Post('sign-in')
     async signIn(@Req() req){
-        console.log(req.user);
         return await this.authService.singIn(req.user)
     }
     @Post('sign-up')
     async signUp(@Body() createUserDto : CreateUserDto){
-        return await this.authService.singUp(createUserDto)
+        return await this.authService.signUp(createUserDto)
     }
 }

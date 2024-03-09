@@ -1,10 +1,11 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import * as joi from 'joi';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { TypeOrmModule } from '@nestjs/typeorm';
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       envFilePath: ['.env'],
       isGlobal: true,
     }),
+   
     ConfigModule.forRoot({
       isGlobal: true,
       validationSchema: joi.object({
@@ -38,6 +40,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       }),
       inject: [ConfigService],
     }),
+    UserModule,
   ],
   controllers: [AppController],
   providers: [AppService],

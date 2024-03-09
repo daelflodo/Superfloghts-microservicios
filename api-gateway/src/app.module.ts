@@ -11,7 +11,7 @@ import { AuthModule } from './auth/auth.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath: ['.env.development'],
+      envFilePath: ['.env'],
       isGlobal: true,
     }),
     UserModule,

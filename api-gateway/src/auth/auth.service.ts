@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { lastValueFrom } from 'rxjs';
+import { firstValueFrom, lastValueFrom } from 'rxjs';
 
 import { UserMSG } from 'src/common/constanst';
 import { ClientProxySuperFlights } from 'src/common/proxy/client-proxy';
@@ -28,7 +28,7 @@ export class AuthService {
   async singIn(user: any) {
     const payload = {
       username: user.username,
-      sub: user._id,
+      sub: user.id,
     };
 
     return {
@@ -36,9 +36,12 @@ export class AuthService {
     };
   }
 
-  async singUp(createUserDto: CreateUserDto) {
-    return lastValueFrom(
-      this._clientProxyUser.send(UserMSG.CREATE, createUserDto),
-    );
+  async signUp(createUserDto: CreateUserDto) {
+    console.log(5);
+  
+    // return firstValueFrom(
+    //   this._clientProxyUser.send(UserMSG.CREATE, createUserDto),
+    // );
+    return this._clientProxyUser.send(UserMSG.CREATE, createUserDto)
   }
 }

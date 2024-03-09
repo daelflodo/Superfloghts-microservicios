@@ -4,7 +4,6 @@ import { MessagePattern, Payload } from '@nestjs/microservices';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UserMSG } from 'src/common/constanst';
-import { UpdateUserDto } from './dto/update-user.dto';
 
 @Controller()
 export class UserController {
@@ -12,6 +11,8 @@ export class UserController {
 
   @MessagePattern(UserMSG.CREATE)
   create(@Payload() createUserDto: CreateUserDto) {
+    console.log(5);
+    
     return this.userService.create(createUserDto);
   }
 

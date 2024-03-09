@@ -23,7 +23,7 @@ import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 
 @ApiTags('flights')
 @UseGuards(JwtAuthGuard)
-@Controller('/api/v2/flight')
+@Controller('/api/v1/flight')
 export class FlightController {
   constructor(private readonly clientProxy: ClientProxySuperFlights) {}
   private _clientProxyFlight = this.clientProxy.clientProxyFlights();

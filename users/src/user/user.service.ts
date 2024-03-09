@@ -1,12 +1,12 @@
-import { HttpStatus, Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, UpdateResult } from 'typeorm';
+import { ConflictException, HttpStatus, Injectable } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 
 import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
 import { IUser } from 'src/common/interfaces/user.interface';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository, UpdateResult } from 'typeorm';
 import { User } from './entities/user.entity';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UserService {
@@ -19,9 +19,21 @@ export class UserService {
     return await bcrypt.hash(password, salt);
   }
   async create(createUserDto: CreateUserDto): Promise<IUser> {
-    createUserDto.password = await this.hashPassword(createUserDto.password);
-    const newUser = await this.userRepository.save(createUserDto);
-    return newUser;
+    try {
+      createUserDto.password = await this.hashPassword(createUserDto.password);
+      const usernameFound = await this.userRepository.findOne({
+        where: { username: createUserDto.username },
+      });
+      const emailFound = await this.userRepository.findOne({
+        where: { email: createUserDto.email },
+      });
+      if (usernameFound || emailFound)
+        throw new ConflictException('key duplicada');
+      const newUser = await this.userRepository.save(createUserDto);
+      return newUser;
+    } catch (error) {
+      return error;
+    }
   }
 
   async findAll(): Promise<IUser[]> {
@@ -32,18 +44,15 @@ export class UserService {
     return await this.userRepository.findOne({ where: { id } });
   }
 
-  async update(
-    id: string,
-    updateUserDto: UpdateUserDto,
-  ): Promise<UpdateResult> {
+  async update(id: string, updateUserDto: UpdateUserDto): Promise<IUser> {
     updateUserDto.password = await this.hashPassword(updateUserDto.password);
-    return await this.userRepository.update(id, updateUserDto);
-    //*hacer un console.log de update result
+    await this.userRepository.update(id, updateUserDto);
+    return await this.userRepository.findOne({ where: { id } });
   }
 
   async remove(id: string) {
     await this.userRepository.delete(id);
-    return { status: HttpStatus.OK, msg: 'Delete' };
+    return { status: HttpStatus.OK, msg: 'Usuario Eliminado Correctamente' };
   }
 
   async findByUsername(username: string) {
