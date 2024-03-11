@@ -8,8 +8,8 @@ import { TimeOutInterceptor } from './common/interceptors/timeout.interceptor';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  // app.useGlobalFilters(new AllExceptionFilter());
-  // app.useGlobalInterceptors(new TimeOutInterceptor());
+  app.useGlobalFilters(new AllExceptionFilter());
+  app.useGlobalInterceptors(new TimeOutInterceptor());
   // app.useGlobalPipes(new ValidationPipe());
   
   const options = new DocumentBuilder()

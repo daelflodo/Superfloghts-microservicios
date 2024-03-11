@@ -1,4 +1,10 @@
-import { BadRequestException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  ConflictException,
+  HttpStatus,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreatePassengerDto } from './dto/create-passenger.dto';
 import { UpdatePassengerDto } from './dto/update-passenger.dto';
 import { Passenger } from './entities/passenger.entity';
@@ -17,7 +23,7 @@ export class PassengerService {
       where: { email: createPassengerDto.email },
     });
 
-    if (passenger) throw new NotFoundException('Passenger not found');
+    if (passenger) throw new ConflictException('The email already exists');
     return await this.passengerRepository.save(createPassengerDto);
   }
 
@@ -32,7 +38,8 @@ export class PassengerService {
   }
 
   async update(id: string, updatePassengerDto: UpdatePassengerDto) {
-    if (!updatePassengerDto.email || !updatePassengerDto.name) throw new BadRequestException('Missing data');
+    if (!updatePassengerDto.email && !updatePassengerDto.name)
+      throw new BadRequestException('Missing data');
     let passenger = await this.passengerRepository.findOne({ where: { id } });
     if (!passenger) throw new NotFoundException('Passenger Not Found');
     await this.passengerRepository.update(id, updatePassengerDto);

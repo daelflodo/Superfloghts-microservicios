@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Flight } from './flight.entity';
 
 @Entity({ name: 'passenger' })
 export class Passenger {
@@ -32,4 +33,7 @@ export class Passenger {
   })
   updatedAt: Date;
 
+  @ManyToOne(() => Flight, (flight) => flight.passengers)
+  @JoinColumn({ name: 'flightId' })
+  flight: Flight;
 }
