@@ -11,7 +11,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { Observable } from 'rxjs';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 import { ClientProxySuperFlights } from 'src/common/proxy/client-proxy';
 import { CreateFlightDto } from './dto/create-flight.dto';
@@ -22,6 +22,7 @@ import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 
 
 @ApiTags('flights')
+@ApiBearerAuth()
 @UseGuards(JwtAuthGuard)
 @Controller('/api/v1/flight')
 export class FlightController {

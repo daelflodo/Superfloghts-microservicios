@@ -1,0 +1,35 @@
+version: "3.8"
+
+services:
+  app:
+    image: daelflodo/app_vuelos:v2
+    container_name: app_vuelos
+    env_file: .env
+    ports:
+      - 80:3000
+    depends_on:
+      - postgres
+      - rabbitmq
+    restart: always
+    networks:
+      - ms_nestjs
+
+  microservice-flights:
+    image: daelflodo/microservice-flights:v2
+    container_name: microservice-flights
+    env_file: .env
+    depends_on:
+      - postgres
+      - rabbitmq
+    restart: always
+    networks:
+      - ms_nestjs
+
+  microservice-passengers:
+    image: daelflodo/microservice-passengers:v2
+    container_name: microservice-passengers
+    env_file: .env
+    depends_on:
+      - postgres
+      - rabbitmq
+    restart: always

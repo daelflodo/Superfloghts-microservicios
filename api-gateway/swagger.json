@@ -33,6 +33,11 @@
         },
         "tags": [
           "users"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
         ]
       },
       "get": {
@@ -45,6 +50,11 @@
         },
         "tags": [
           "users"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
         ]
       }
     },
@@ -68,6 +78,11 @@
         },
         "tags": [
           "users"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
         ]
       },
       "patch": {
@@ -99,6 +114,11 @@
         },
         "tags": [
           "users"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
         ]
       },
       "delete": {
@@ -120,6 +140,11 @@
         },
         "tags": [
           "users"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
         ]
       }
     },
@@ -144,6 +169,11 @@
         },
         "tags": [
           "passengers"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
         ]
       },
       "get": {
@@ -156,6 +186,11 @@
         },
         "tags": [
           "passengers"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
         ]
       }
     },
@@ -179,6 +214,11 @@
         },
         "tags": [
           "passengers"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
         ]
       },
       "patch": {
@@ -210,6 +250,11 @@
         },
         "tags": [
           "passengers"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
         ]
       },
       "delete": {
@@ -231,6 +276,11 @@
         },
         "tags": [
           "passengers"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
         ]
       }
     },
@@ -255,6 +305,11 @@
         },
         "tags": [
           "flights"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
         ]
       },
       "get": {
@@ -267,6 +322,11 @@
         },
         "tags": [
           "flights"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
         ]
       }
     },
@@ -290,6 +350,11 @@
         },
         "tags": [
           "flights"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
         ]
       },
       "patch": {
@@ -321,6 +386,11 @@
         },
         "tags": [
           "flights"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
         ]
       },
       "delete": {
@@ -342,6 +412,11 @@
         },
         "tags": [
           "flights"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
         ]
       }
     },
@@ -373,6 +448,11 @@
         },
         "tags": [
           "flights"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
         ]
       }
     },
@@ -380,6 +460,29 @@
       "post": {
         "operationId": "AuthController_signIn",
         "parameters": [],
+        "requestBody": {
+          "required": true,
+          "description": "Credentials for user authentication",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "username": {
+                    "type": "string",
+                    "description": "The username of the user",
+                    "example": "usuario"
+                  },
+                  "password": {
+                    "type": "string",
+                    "description": "The password of the user",
+                    "example": "password123"
+                  }
+                }
+              }
+            }
+          }
+        },
         "responses": {
           "201": {
             "description": ""

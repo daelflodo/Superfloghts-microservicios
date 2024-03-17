@@ -9,7 +9,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { Observable } from 'rxjs';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -19,19 +19,20 @@ import { UserMSG } from 'src/common/constanst';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 
 @ApiTags('users')
+@ApiBearerAuth()
 @UseGuards(JwtAuthGuard)
 @Controller('/api/v1/user')
 export class UserController {
   constructor(
     private readonly clientProxy: ClientProxySuperFlights,
-  ) {}
-  private _clientProxyUser = this.clientProxy.clientProxyUsers();
-
-  @Post()
-  create(@Body() createUserDto: CreateUserDto): Observable<IUser> {
-    return this._clientProxyUser.send(UserMSG.CREATE, createUserDto);
-  }
-
+    ) {}
+    private _clientProxyUser = this.clientProxy.clientProxyUsers();
+    
+    @Post()
+    create(@Body() createUserDto: CreateUserDto): Observable<IUser> {
+      return this._clientProxyUser.send(UserMSG.CREATE, createUserDto);
+    }
+    
   @Get()
   findAll(): Observable<IUser[]> {
     return this._clientProxyUser.send(UserMSG.FIND_ALL, '');

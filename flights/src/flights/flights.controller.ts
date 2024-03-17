@@ -35,9 +35,7 @@ export class FlightsController {
   }
 
   @MessagePattern(FlightMSG.ADD_PASSANGER)
-   addPassanger(@Payload() payload:any) {
-    console.log(2024);
-    
+   addPassanger(@Payload() payload:any) {    
     return this.flightsService.addPassenger(
       payload.flightId,
       payload.passengerId,
